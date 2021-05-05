@@ -1,0 +1,90 @@
+package com.cts.lambda;
+
+import java.util.Scanner;
+
+@FunctionalInterface
+interface Assignment {
+	boolean display(int num);
+
+}
+
+public class MyAssignment {
+
+	static Assignment isOdd() {
+
+		return (num) -> {                                        //lambda expression
+			if (num % 2 == 0) {
+				return true;
+			}
+			return false;
+
+		};
+	}
+
+	static Assignment isPrime() {
+
+		return (num) -> {                                       //lambda expression
+			int count = 0;
+			for (int i = 2; i < num / 2; i++) {
+				if (num % i == 0) {
+					count++;
+				}
+			}
+			if (count >= 1)
+				return true;
+			return false;
+		};
+
+	}
+
+	static Assignment isPalindrome() {
+
+		return (num) -> {                                         //lambda expression
+			int palin = 0;
+			int remind = 0;
+			int temp = num;
+
+			while (temp != 0) {
+				remind = temp % 10;
+				palin = palin * 10 + remind;
+				temp /= 10;
+			}
+			if (palin == num)
+				return true;
+			return false;
+
+		};
+	}
+
+	public static void main(String[] arr) {
+
+		Scanner sc = new Scanner(System.in);
+
+		Assignment boo;
+		boolean ans;
+		int lines = sc.nextInt();
+
+		for (int i = 0; i < lines; i++) {
+			int type = sc.nextInt();
+			int num = sc.nextInt();
+
+			if (type == 1) {
+				boo = MyAssignment.isOdd();
+				ans = boo.display(num);
+				System.out.println((ans == true) ? "EVEN" : "ODD");
+
+			} else if (type == 2) {
+				boo = MyAssignment.isPrime();
+				ans = boo.display(num);
+				System.out.println((ans == true) ? "COMPOSITE" : "PRIME");
+
+			} else if (type == 3) {
+				boo = MyAssignment.isPalindrome();
+				ans = boo.display(num);
+				System.out.println((ans == true) ? "PALINDROME" : "NOT PALINDROME");
+			}
+		}
+
+	}
+
+}
