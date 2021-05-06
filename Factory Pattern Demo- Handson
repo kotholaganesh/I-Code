@@ -1,0 +1,103 @@
+// create an interface and with appropriate abstract methods
+
+package com.gani.factoryPatternDemo;
+
+public interface Consumer {
+
+	public void sellProduct();
+
+	public void buyProduct();
+
+}
+
+
+
+
+//create a Buyer class which implements Consumer interface
+
+package com.gani.factoryPatternDemo;
+
+public class Buyer implements Consumer {
+
+	@Override
+	public void sellProduct() {
+		System.out.println("Buyer sell a product to consumer");
+
+	}
+
+	@Override
+	public void buyProduct() {
+		System.out.println("Buyer buy a product from consumer");
+
+	}
+
+}
+
+
+//create seller class which implements Consumer interface
+
+package com.gani.factoryPatternDemo;
+
+public class Seller implements Consumer {
+
+	@Override
+	public void sellProduct() {
+		System.out.println("Seller sell a product to consumer");
+
+	}
+
+	@Override
+	public void buyProduct() {
+		System.out.println("Seller buy a product from consumer");
+
+	}
+
+}
+
+
+//create OLX factory class and method:	Consumer getUser(String type)
+//		returns an instance of Consumer based on the user type as argument (seller or buyer)
+
+package com.gani.factoryPatternDemo;
+
+public class OLX {
+	public static Consumer getUser(String type)
+	{
+		Consumer c = null;
+		if(type.equalsIgnoreCase("buyer"))
+		{
+			c = new Buyer();
+		}else if(type.equalsIgnoreCase("seller"))
+		{
+			c = new Seller();
+		}
+		
+		c.buyProduct();
+		c.sellProduct();
+		return c;
+	}
+
+}
+
+
+
+//create FactoryPatternDemo having main method get input from the user (type of consumer)	
+//			and obtain the instance of the type from the Factory class called Olx
+
+package com.gani.factoryPatternDemo;
+
+import java.util.Scanner;
+
+public class FactoryPatternDemo {
+	
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		String typ = sc.nextLine();
+
+		OLX.getUser(typ);
+		sc.close();
+	}
+
+}
+
