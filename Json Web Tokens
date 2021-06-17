@@ -1,0 +1,124 @@
+JWT tokens
+=========================
+->it is an  authorization strategy
+->we use this jwt tokens instead of sessions or session id because using tokens in place of session IDs can lower your server load, streamline      permission management, and provide better tools for supporting a distributed or cloud-based infrastructure.
+->jwt tokens simply means tokens on dynamic web based applications.
+->jwt tokens are differed from sessions that adds simply signature in it.
+
+Configuring Libraries in Maven 
+=========================
+->Add dependenies in pom.xml file 
+   by just going to maven repository adn serach for json web token
+->
+
+         <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+           <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>0.9.1</version>
+           </dependency>
+
+
+
+
+Try triggering REST requests with and without valid tokens and checking response
+================================================================
+
+->create spring boot application
+->add dependencys like
+                        <dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+
+		</dependency>       
+
+->create rest controller class
+------------------------------------------
+
+package com.cts.boot;
+
+import java.awt.SystemColor;
+import java.util.Date;
+
+import javax.xml.bind.DatatypeConverter;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+@RestController
+public class MyRestController {
+
+	private static final String SECRET_KEY = "84daf5295e5bb1df";
+	
+	@GetMapping("/gettoken")
+	public String getToken()
+	{
+		Date date = new Date(System.currentTimeMillis());
+		String token = Jwts.builder()
+				        .setSubject("JWT tutorial")
+				        .setIssuedAt(date)
+		                .setIssuer("Ganesh")
+		                .claim("Test_Claim","Hello")
+		                .signWith(SignatureAlgorithm.HS512,SECRET_KEY).compact();
+		return token;
+	}
+	
+	@PostMapping("/verifytoken")
+	public String verifyToken(@RequestParam(value = "token",defaultValue = "NA")String token)
+	{
+		System.out.println("Token verification initiated");
+		String response = "INVALID TOKEN";
+		try {
+			Claims claims = Jwts.parser()
+					         .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+					         .parseClaimsJws(token)
+					         .getBody();
+			if(claims.get("Test_Claim").equals("Hello"))
+			{
+				response = "VALID TOKEN";
+			}
+		}
+		catch(ExpiredJwtException e)
+		{
+			System.out.println("Token was expired");
+		}catch(Exception e)
+		{
+			response = "INVALID TOKEN";
+			System.out.println("Error while parsing token");
+		}
+		return response;
+	}
+}
+
+
+---------------------------------------------------------------------------------
+
+-> run in postman using get and post requests.
+-> Get request ---- localhost:8080/gettoken
+     copy the generated token from here
+-> Post request-----localhost:8080/verifytoken?token='paste the token which is copied from get request'
+
+
+
+
+
+Create Oauth Config Class to define secret keys, public private keys , token validity and scopes
+==========================================================================
+
+Write a Spring Boot RESt application, use Auth and Resource Servers
+=======================================================
+
