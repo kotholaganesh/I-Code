@@ -1,4 +1,4 @@
-JWT tokens
+JWT tokens(Json We Tokens)
 =========================
 ->it is an  authorization strategy
 ->we use this jwt tokens instead of sessions or session id because using tokens in place of session IDs can lower your server load, streamline      permission management, and provide better tools for supporting a distributed or cloud-based infrastructure.
